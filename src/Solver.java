@@ -6,3 +6,9 @@ public class Solver {
         System.out.println("hello world");
     }
 }
+
+class Assignment {
+    Assignment(int num_wizards, file) {
+
+    }
+}
