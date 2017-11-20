@@ -2,6 +2,7 @@
  * Created by derek on 11/19/17.
  */
 import java.io.*;
+import java.util.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,8 @@ class Problem {
     also reads in constraints, and turns them into formulations
     */
     BiMap<String, Integer> assignments;
-    Constraints constraints;
+    ArrayList<String[]> constraints = new ArrayList<>();
+    Constraints c;
 
     Problem(String fileName) {
         String line = null;
@@ -33,9 +35,11 @@ class Problem {
             }
             if((line = bufferedReader.readLine()) != null) {
                 System.out.println("num constraints: " + line);
+                c = new Constraints(Integer.parseInt(line.split(" ")[0]));
             }
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
+                c.addConstraint(line.split(" "));
             }
             bufferedReader.close();
         }
@@ -46,6 +50,11 @@ class Problem {
             System.out.println("error");
         }
     }
+
+    String solve() {
+        
+        return "";
+    }
 }
 
 class Constraints {
@@ -53,7 +62,7 @@ class Constraints {
     Constraints(int num_constraints) {
         constraints = new ArrayList<>(num_constraints);
     }
-    void addConstraint (String[] wizardNameTrio) {
+    void addConstraint(String[] wizardNameTrio) {
         constraints.add(wizardNameTrio);
     }
 
