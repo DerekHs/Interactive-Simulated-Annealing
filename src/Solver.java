@@ -6,6 +6,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 public class Solver {
     public static void main(String[] args) {
         Problem p = new Problem("phase2_inputs/inputs20/input20_0.in");
@@ -17,7 +20,7 @@ class Problem {
     a mapping from wizard to age rank
     also reads in constraints, and turns them into formulations
     */
-    String[] ordering;
+    BiMap<String, Integer> assignments;
     Constraints constraints;
 
     Problem(String fileName) {
@@ -26,9 +29,12 @@ class Problem {
             FileReader reader = new FileReader(fileName);
             BufferedReader bufferedReader = new BufferedReader(reader);
             if ((line = bufferedReader.readLine()) != null) {
-                ordering = new String[Integer.parseInt(line)];
+                System.out.println("number of wizards:" + line);
             }
-            while((line = bufferedReader.readLine()) != null) {
+            if((line = bufferedReader.readLine()) != null) {
+                System.out.println("num constraints: " + line);
+            }
+            while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
             }
             bufferedReader.close();
@@ -51,9 +57,9 @@ class Constraints {
         constraints.add(wizardNameTrio);
     }
 
-    boolean verifyConsistency (String[] ordering) {
-        for (int i = 0; i < constraints.size(); i++) {
-
-        }
-    }
+//    boolean verifyConsistency (String[] ordering) {
+//        for (int i = 0; i < constraints.size(); i++) {
+//
+//        }
+//    }
 }
