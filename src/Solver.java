@@ -3,10 +3,10 @@
  */
 import java.io.*;
 import java.util.*;
-import com.google.common.collect.HashBiMap;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-
-import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -17,32 +17,29 @@ public class Solver {
 }
 
 class Problem {
-    /* reads in a file, and stores the problem
+    /* reads in a file, and creates a system to store
+    a mapping from wizard to age rank
+    also reads in constraints, and turns them into formulations
     */
-    ArrayList<Constraint> constraints;
-    HashMap<String, boolean[]> domains;
-    HashBiMap<String, Integer> assignments;
+    BiMap<String, Integer> assignments;
+    ArrayList<String[]> constraints = new ArrayList<>();
+    Constraints c;
 
     Problem(String fileName) {
-        int numWizards;
-        domains = new HashMap<String, boolean[]>();
-        assignments = HashBiMap.create();
         String line = null;
         try {
             FileReader reader = new FileReader(fileName);
             BufferedReader bufferedReader = new BufferedReader(reader);
             if ((line = bufferedReader.readLine()) != null) {
-                //System.out.println("number of wizards:" + line);
-                numWizards = Integer.parseInt(line.trim());
+                System.out.println("number of wizards:" + line);
             }
             if((line = bufferedReader.readLine()) != null) {
                 System.out.println("num constraints: " + line);
+                c = new Constraints(Integer.parseInt(line.split(" ")[0]));
             }
-            constraints = new ArrayList<Constraint>();
             while ((line = bufferedReader.readLine()) != null) {
-                //System.out.println(line);
-                String[] names = line.split("\\s+");
-                constraints.add(new Constraint(names[0], names[1], names[2]));
+                System.out.println(line);
+                c.addConstraint(line.split(" "));
             }
             bufferedReader.close();
         }
@@ -55,17 +52,23 @@ class Problem {
     }
 
     String solve() {
+        
         return "";
     }
 }
 
-class Constraint {
-    String wizard1;
-    String wizard2;
-    String wizard3;
-    Constraint(String wizard1, String wizard2, String wizard3) {
-        this.wizard1 = wizard1;
-        this.wizard2 = wizard2;
-        this.wizard3 = wizard3;
+class Constraints {
+    ArrayList<String[]> constraints;
+    Constraints(int num_constraints) {
+        constraints = new ArrayList<>(num_constraints);
     }
+    void addConstraint(String[] wizardNameTrio) {
+        constraints.add(wizardNameTrio);
+    }
+
+//    boolean verifyConsistency (String[] ordering) {
+//        for (int i = 0; i < constraints.size(); i++) {
+//
+//        }
+//    }
 }
