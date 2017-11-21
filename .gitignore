@@ -2,3 +2,5 @@
 .idea
 *.class
 .DS_Store
+*.iml
+out.production.Solver
