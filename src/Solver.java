@@ -2,8 +2,8 @@
  * Created by derek on 11/19/17.
  */
 import java.io.*;
-import java.util.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 import com.google.common.collect.HashBiMap;
@@ -46,6 +46,7 @@ class Problem {
                     int[] possiblePositions = IntStream.range(0, numWizards).toArray();
                     HashSet<Integer> positionsSet = new HashSet<Integer>(Ints.asList(possiblePositions));
                     domains.putIfAbsent(wizard, positionsSet);
+                    assignments.putIfAbsent(wizard, null);
                 }
             }
             bufferedReader.close();
@@ -58,9 +59,25 @@ class Problem {
         }
     }
 
+    // solve to w
     String solve() {
-        
+        while (wizardSet.size() > 0) {
+            String toAssign = this.minimumRemainingValues();
+
+        }
         return "";
+    }
+
+    String minimumRemainingValues() {
+        int min = Integer.MAX_VALUE;
+        String minWizard = null;
+        for (String wizard : domains.keySet()) {
+            if (domains.get(wizard).size() < min) {
+                minWizard = wizard;
+                min = domains.get(wizard).size();
+            }
+        }
+        return minWizard;
     }
 }
 
@@ -73,4 +90,8 @@ class Constraint {
         this.wizard2 = wizard2;
         this.wizard3 = wizard3;
     }
+}
+
+class EncapsulatedVariable {
+
 }
