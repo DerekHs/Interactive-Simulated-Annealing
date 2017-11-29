@@ -21,11 +21,11 @@ def main():
     in_file.sort()
     out_file.sort()
 
-    print(out_file)
+    # print(out_file)
     for i in range(0, len(out_file)):
         # print(i)    
-        print(in_file[i])
-        print(out_file[i])
+        # print(in_file[i])
+        # print(out_file[i])
         constraints_satisfied, num_constraints, constraints_failed = processInput(in_file[i], out_file[i])
         print("You satisfied {}/{} constraints. List of failed constraints: {}".format(constraints_satisfied, num_constraints, constraints_failed))
     
