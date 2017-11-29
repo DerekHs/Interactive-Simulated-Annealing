@@ -7,12 +7,10 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.SetVar;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.stream.IntStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.io.PrintWriter;
@@ -25,7 +23,11 @@ public class ChocoSolve {
         Model model = new Model("Choco Solver Hello World");
         HashSet<String> wizards = p.wizardSet;
         for (String wizard : wizards) {
-            wizardMappings.put(wizard, model.intVar(wizard, IntStream.range(0, wizards.size()).toArray()));
+            int[] domains = new int[wizards.size()];
+            for (int i = 0; i < wizards.size(); i++) {
+                domains[i] = i;
+            }
+            wizardMappings.put(wizard, model.intVar(wizard, domains));
         }
         ArrayList<Constraint> constraints = p.constraints;
         for (Constraint c: constraints) {
