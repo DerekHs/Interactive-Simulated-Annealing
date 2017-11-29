@@ -11,9 +11,23 @@ import com.google.common.primitives.Ints;
 
 public class Dispatch {
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            Problem p = Parser.parse("inputs/phase2_inputs/inputs50/input50_" + Integer.toString(i)+ ".in");
+        File folder = new File("./inputs");
+        File[] listOfFiles = folder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return !name.equals(".DS_Store");
+            }
+        });
+
+        File outputDirectory = new File("./outputs");
+        if (!outputDirectory.exists()) {
+            outputDirectory.mkdir();
+        }
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+            Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
             ChocoSolve.solve(p);
+            System.out.println("Finished " + listOfFiles[i].getName());
         }
     }
 }
