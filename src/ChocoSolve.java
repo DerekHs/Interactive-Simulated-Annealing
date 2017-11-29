@@ -47,11 +47,8 @@ public class ChocoSolve {
                     return one.getValue() - other.getValue();
                 }
             });
-            System.out.println(solution);
             try {
-                String newpath = p.fileName.replace("In", "Out");
-                newpath = newpath.replace("in", "out");
-                System.out.println(newpath);
+                String newpath = p.fileName.replace("in", "out");
                 FileWriter fileWriter = new FileWriter(newpath);
                 PrintWriter printWriter = new PrintWriter(fileWriter);
                 for (IntVar wizard: solution) {
