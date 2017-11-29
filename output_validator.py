@@ -7,8 +7,8 @@ def main():
     # if len(argv) != 2:
     #     print("Usage: python output_validator.py [path_to_input_file] [path_to_output_file]")
     #     return
-    path_in = 'inputs/phase2_inputs/*.in'
-    path_out = 'outputs/phase2_outputs/*.out'
+    path_in = 'inputs/*.in'
+    path_out = 'outputs/*.out'
     
     in_file = []
     out_file = []
