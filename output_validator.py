@@ -1,20 +1,41 @@
 # Released to students
-
+import os
 import sys
+import glob
 
-def main(argv):
-    if len(argv) != 2:
-        print("Usage: python output_validator.py [path_to_input_file] [path_to_output_file]")
-        return
-    constraints_satisfied, num_constraints, constraints_failed = processInput(argv[0], argv[1])
-    print("You satisfied {}/{} constraints. List of failed constraints: {}".format(constraints_satisfied, num_constraints, constraints_failed))
+def main():
+    # if len(argv) != 2:
+    #     print("Usage: python output_validator.py [path_to_input_file] [path_to_output_file]")
+    #     return
+    path_in = 'inputs/phase2_inputs/*.in'
+    path_out = 'outputs/phase2_outputs/*.out'
+    
+    in_file = []
+    out_file = []
+
+    for f in glob.glob(path_in):
+        in_file.append(f)
+    for f in glob.glob(path_out):
+        out_file.append(f)
+
+    in_file.sort()
+    out_file.sort()
+
+    print(out_file)
+    for i in range(0, len(out_file)):
+        # print(i)    
+        print(in_file[i])
+        print(out_file[i])
+        constraints_satisfied, num_constraints, constraints_failed = processInput(in_file[i], out_file[i])
+        print("You satisfied {}/{} constraints. List of failed constraints: {}".format(constraints_satisfied, num_constraints, constraints_failed))
+    
 
 def processInput(input_file, output_file):
     fin = open(input_file, "r")
     fout = open(output_file, "r")
 
     num_wiz_in_input = int(fin.readline().split()[0])
-    input_wizard_set = set(fin.readline().split())
+    # input_wizard_set = set(fin.readline().split())
     num_constraints = int(fin.readline().split()[0])
 
     output_ordering = fout.readline().split()
@@ -28,8 +49,8 @@ def processInput(input_file, output_file):
     if (len(output_ordering_set) != len(output_ordering)):
         return "The output ordering contains repeated wizards."
 
-    if (input_wizard_set != output_ordering_set):
-        return "The output ordering contains wizards that are different from the ones in the input ordering."
+    # if (input_wizard_set != output_ordering_set):
+    #     return "The output ordering contains wizards that are different from the ones in the input ordering."
 
     # Counts how many constraints are satisfied.
     constraints_satisfied = 0
@@ -53,4 +74,5 @@ def processInput(input_file, output_file):
     return constraints_satisfied, num_constraints, constraints_failed
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    # main(sys.argv[1:])
+    main()

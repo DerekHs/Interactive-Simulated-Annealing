@@ -49,7 +49,10 @@ public class ChocoSolve {
             });
             System.out.println(solution);
             try {
-                FileWriter fileWriter = new FileWriter("outputs/output50_0.out");
+                String newpath = p.fileName.replace("In", "Out");
+                newpath = newpath.replace("in", "out");
+                System.out.println(newpath);
+                FileWriter fileWriter = new FileWriter(newpath);
                 PrintWriter printWriter = new PrintWriter(fileWriter);
                 for (IntVar wizard: solution) {
                     printWriter.print(wizard.getName() + " ");

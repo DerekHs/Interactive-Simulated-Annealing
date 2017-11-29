@@ -11,7 +11,9 @@ import com.google.common.primitives.Ints;
 
 public class Dispatch {
     public static void main(String[] args) {
-        Problem p = Parser.parse("phase2_inputs/inputs50/input50_0.in");
-        ChocoSolve.solve(p);
+        for (int i = 0; i < 10; i++) {
+            Problem p = Parser.parse("inputs/phase2_inputs/inputs50/input50_" + Integer.toString(i)+ ".in");
+            ChocoSolve.solve(p);
+        }
     }
 }
