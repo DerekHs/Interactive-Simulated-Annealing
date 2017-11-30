@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.Instant;
+import java.time.Duration;
 import com.google.common.collect.HashBiMap;
 import com.google.common.primitives.Ints;
 
@@ -24,9 +26,12 @@ public class Dispatch {
         }
 
         for (int i = 0; i < listOfFiles.length; i++) {
+            System.out.println("Started " + listOfFiles[i].getName());
+            Instant start = Instant.now();
             Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
             ChocoSolve.solve(p);
-            System.out.println("Finished " + listOfFiles[i].getName());
+            Instant end = Instant.now();
+            System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
         }
     }
 }

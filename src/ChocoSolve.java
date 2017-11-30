@@ -5,8 +5,11 @@
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.SetVar;
-import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.search.loop.move.MoveLNS;
+import org.chocosolver.solver.search.loop.lns.neighbors.INeighbor;
+import org.chocosolver.solver.search.loop.lns.INeighborFactory;
+import org.chocosolver.solver.search.limits.FailCounter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +42,14 @@ public class ChocoSolve {
             )).post();
         }
         model.allDifferent(wizardMappings.values().toArray(new IntVar[(wizardMappings.values().size())])).post();
-        if (model.getSolver().solve()) {
+        Solver s = model.getSolver();
+        INeighbor blackBox = INeighborFactory.blackBox(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
+        //INeighbor explanationBased = INeighborFactory.explanationBased(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
+        //INeighbor propagationGuided = INeighborFactory.propagationGuided(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
+        //INeighbor reversedPropagationGuided = INeighborFactory.reversedPropagationGuided(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
+        //INeighbor random = INeighborFactory.random(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
+        s.setLNS(blackBox, new FailCounter(s, 200));
+        if (s.solve()) {
             ArrayList<IntVar> solution = new ArrayList<IntVar>();
             for (IntVar wizard : wizardMappings.values()) {
                 solution.add(wizard);
