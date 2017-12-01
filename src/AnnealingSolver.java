@@ -1,3 +1,5 @@
+import org.chocosolver.solver.Model;
+
 import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,12 +31,17 @@ public class AnnealingSolver {
         curOrdering = getRandomOrdering();
 
         Random r = new Random();
+        boolean flag = true;
         while (true) {
             int before = getScore(curOrdering, constraints);
-            System.out.println(before);
+            //System.out.println(before);
             if (before == constraints.size()) {
                 writeToFile(curOrdering, p);
                 return;
+            }
+            if (before >= 0.95*constraints.size() && flag) {
+                System.out.println("viable");
+                flag = false;
             }
             newOrdering = getNeighbor(curOrdering);
             int after = getScore(newOrdering, constraints);
@@ -105,6 +112,32 @@ public class AnnealingSolver {
             int randomNum2 = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
             String toPut = next.remove(randomNum1);
             next.add(randomNum2, toPut);
+        }
+        return next;
+    }
+
+    public ArrayList<String> capOff(ArrayList<String> prev) {
+        ArrayList<String> next = new ArrayList<String>();
+        for (int i = 0; i < prev.size(); i++) {
+            next.add(prev.get(i));
+        }
+        HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+        for (int i = 0; i < prev.size(); i++) {
+            tmp.put(prev.get(i), i);
+        }
+        for (Constraint c : constraints) {
+            String first = c.wizards[0];
+            String second = c.wizards[1];
+            String third = c.wizards[2];
+            if (tmp.get(third) < tmp.get(first) && tmp.get(third) > tmp.get(second)) {
+                Collections.swap(next, 0, tmp.get(third));
+                return next;
+            }
+            if (tmp.get(third) > tmp.get(first) && tmp.get(third) < tmp.get(second)) {
+                Collections.swap(next, prev.size()-1, tmp.get(third));
+                return next;
+            }
+
         }
         return next;
     }
