@@ -31,24 +31,32 @@ public class AnnealingSolver {
         curOrdering = getRandomOrdering();
 
         Random r = new Random();
-        boolean flag = true;
+        int counter = 0;
         while (true) {
             int before = getScore(curOrdering, constraints);
-            //System.out.println(before);
-            if (before == constraints.size()) {
+            System.out.println(before);
+            if (before >= constraints.size()) {
                 writeToFile(curOrdering, p);
                 return;
             }
-            if (before >= 0.95*constraints.size() && flag) {
-                System.out.println("viable");
-                flag = false;
+//            if (before >= 1100 && counter % 100 == 0) {
+//                System.out.println("reroll");
+//                newOrdering = reRoll(curOrdering);
+//            }
+            if (before >= 781 && counter % 100 == 0) {
+                System.out.println("capoff");
+                temperature = 0.3;
+                newOrdering = capOff(curOrdering);
             }
-            newOrdering = getNeighbor(curOrdering);
+            else {
+                newOrdering = getNeighbor(curOrdering);
+            }
             int after = getScore(newOrdering, constraints);
             if (acceptanceProbability(before, after, temperature) > r.nextDouble()) {
                 curOrdering = newOrdering;
             }
             temperature = temperature*alpha;
+            counter ++;
         }
 
     }
@@ -107,7 +115,7 @@ public class AnnealingSolver {
         for (int i = 0; i < prev.size(); i++) {
             next.add(prev.get(i));
         }
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 4; i++) {
             int randomNum1 = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
             int randomNum2 = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
             String toPut = next.remove(randomNum1);
@@ -138,6 +146,42 @@ public class AnnealingSolver {
                 return next;
             }
 
+        }
+        return next;
+    }
+    public ArrayList<String> reRoll(ArrayList<String> prev) {
+        ArrayList<String> next = new ArrayList<String>();
+        for (int i = 0; i < prev.size(); i++) {
+            next.add(prev.get(i));
+        }
+        ArrayList<String> offenders = new ArrayList<>();
+        HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+        for (int i = 0; i < prev.size(); i++) {
+            tmp.put(prev.get(i), i);
+        }
+        for (Constraint c : constraints) {
+            String first = c.wizards[0];
+            String second = c.wizards[1];
+            String third = c.wizards[2];
+            if (tmp.get(third) > tmp.get(first) && tmp.get(third) > tmp.get(second)) {
+                Collections.swap(next, 0, tmp.get(third));
+                continue;
+            }
+            if (tmp.get(third) < tmp.get(first) && tmp.get(third) < tmp.get(second)) {
+                Collections.swap(next, prev.size()-1, tmp.get(third));
+                continue;
+            }
+            offenders.add(first);
+            offenders.add(second);
+            offenders.add(third);
+        }
+        Iterator<String> offenderIterator = offenders.iterator();
+        while (offenderIterator.hasNext()) {
+            String removed = offenderIterator.next();
+            next.remove(removed);
+            int randomNum = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
+            next.add(randomNum, removed);
+            offenderIterator.remove();
         }
         return next;
     }
