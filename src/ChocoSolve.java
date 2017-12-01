@@ -21,7 +21,7 @@ import java.io.FileWriter;
 
 
 public class ChocoSolve {
-    static ArrayList<String> solve(Problem p) {
+    static void solve(Problem p) {
         HashMap<String, IntVar> wizardMappings = new HashMap<String, IntVar>();
         Model model = new Model("Choco Solver Hello World");
         HashSet<String> wizards = p.wizardSet;
@@ -48,7 +48,7 @@ public class ChocoSolve {
         //INeighbor propagationGuided = INeighborFactory.propagationGuided(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
         //INeighbor reversedPropagationGuided = INeighborFactory.reversedPropagationGuided(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
         //INeighbor random = INeighborFactory.random(new IntVar[]{model.intVar("dummy", new int[]{wizards.size()})});
-        s.setLNS(blackBox, new FailCounter(s, 200));
+        s.setLNS(blackBox, new FailCounter(s, 50));
         if (s.solve()) {
             ArrayList<IntVar> solution = new ArrayList<IntVar>();
             for (IntVar wizard : wizardMappings.values()) {
@@ -67,11 +67,12 @@ public class ChocoSolve {
                     printWriter.print(wizard.getName() + " ");
                 }
                 printWriter.close();
+                System.out.println("Finished " + p.fileName);
             }
             catch (IOException ex) {
                 System.out.println("could not write file out");
             }
         }
-        return null;
+        System.out.println("could not solve" + p.fileName);
     }
 }

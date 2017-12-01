@@ -29,7 +29,8 @@ public class Dispatch {
             System.out.println("Started " + listOfFiles[i].getName());
             Instant start = Instant.now();
             Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
-            ChocoSolve.solve(p);
+            //ChocoSolve.solve(p);
+            AnnealingSolver.solve(p);
             Instant end = Instant.now();
             System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
         }
