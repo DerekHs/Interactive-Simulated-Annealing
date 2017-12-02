@@ -1,4 +1,6 @@
+import org.chocosolver.solver.ICause;
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.variables.IntVar;
 
 import java.awt.*;
 import java.io.FileWriter;
@@ -34,19 +36,31 @@ public class AnnealingSolver {
         int counter = 0;
         while (true) {
             int before = getScore(curOrdering, constraints);
-            System.out.println(before);
-            if (before >= constraints.size()) {
+            if (before == constraints.size()) {
                 writeToFile(curOrdering, p);
                 return;
             }
-//            if (before >= 1100 && counter % 100 == 0) {
-//                System.out.println("reroll");
-//                newOrdering = reRoll(curOrdering);
-//            }
-            if (before >= 781 && counter % 100 == 0) {
-                System.out.println("capoff");
-                temperature = 0.3;
+            double goodness = before/(double)constraints.size();
+            if (counter%10001 == 0) {
+                System.out.println(before);
+            }
+            if (goodness > 0.999 && counter % 1000000 == 0) {
+                System.out.println("more heat");
                 newOrdering = capOff(curOrdering);
+                temperature = 0.5;
+            }
+            if (goodness > 0.95 && counter % 10000 == 0) {
+                newOrdering = capOff(curOrdering);
+                temperature = 0.3;
+            }
+//            else if (goodness > 0.85 && counter % 100 == 0) {
+//                System.out.println("try to fix");
+//                newOrdering = reRoll(curOrdering);
+//                temperature *= 10;
+//            }
+            else if (goodness < 0.8 && counter % 201 == 0) {
+                System.out.println("reroll");
+                newOrdering = getRandomOrdering();
             }
             else {
                 newOrdering = getNeighbor(curOrdering);
@@ -115,7 +129,7 @@ public class AnnealingSolver {
         for (int i = 0; i < prev.size(); i++) {
             next.add(prev.get(i));
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
             int randomNum1 = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
             int randomNum2 = ThreadLocalRandom.current().nextInt(0, prev.size() - 1);
             String toPut = next.remove(randomNum1);
@@ -154,28 +168,9 @@ public class AnnealingSolver {
         for (int i = 0; i < prev.size(); i++) {
             next.add(prev.get(i));
         }
-        ArrayList<String> offenders = new ArrayList<>();
+        ArrayList<String> getOffenders = getOffenders(prev);
         HashMap<String, Integer> tmp = new HashMap<String, Integer>();
-        for (int i = 0; i < prev.size(); i++) {
-            tmp.put(prev.get(i), i);
-        }
-        for (Constraint c : constraints) {
-            String first = c.wizards[0];
-            String second = c.wizards[1];
-            String third = c.wizards[2];
-            if (tmp.get(third) > tmp.get(first) && tmp.get(third) > tmp.get(second)) {
-                Collections.swap(next, 0, tmp.get(third));
-                continue;
-            }
-            if (tmp.get(third) < tmp.get(first) && tmp.get(third) < tmp.get(second)) {
-                Collections.swap(next, prev.size()-1, tmp.get(third));
-                continue;
-            }
-            offenders.add(first);
-            offenders.add(second);
-            offenders.add(third);
-        }
-        Iterator<String> offenderIterator = offenders.iterator();
+        Iterator<String> offenderIterator = getOffenders.iterator();
         while (offenderIterator.hasNext()) {
             String removed = offenderIterator.next();
             next.remove(removed);
@@ -184,5 +179,28 @@ public class AnnealingSolver {
             offenderIterator.remove();
         }
         return next;
+    }
+
+    public ArrayList<String> getOffenders (ArrayList<String> ordering) {
+        ArrayList<String> offenders = new ArrayList<>();
+        HashMap<String, Integer> tmp = new HashMap<String, Integer>();
+        for (int i = 0; i < ordering.size(); i++) {
+            tmp.put(ordering.get(i), i);
+        }
+        for (Constraint c : constraints) {
+            String first = c.wizards[0];
+            String second = c.wizards[1];
+            String third = c.wizards[2];
+            if (tmp.get(third) > tmp.get(first) && tmp.get(third) > tmp.get(second)) {
+                continue;
+            }
+            if (tmp.get(third) < tmp.get(first) && tmp.get(third) < tmp.get(second)) {
+                continue;
+            }
+            offenders.add(first);
+            offenders.add(second);
+            offenders.add(third);
+        }
+        return offenders;
     }
 }
