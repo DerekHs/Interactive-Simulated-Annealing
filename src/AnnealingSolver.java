@@ -5,6 +5,14 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.lang.Math;
 import java.util.Random;
+import java.nio.*;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.Selector;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.util.Iterator;
 
 /**
  * Created by derek on 11/30/17.
@@ -14,6 +22,10 @@ public class AnnealingSolver {
     HashSet<String> wizardSet;
     ArrayList<Constraint> constraints;
     double alpha;
+    ArrayList<String> curOrdering;
+    ArrayList<String> newOrdering;
+    double temperature = 1.0;
+
     public AnnealingSolver(Problem p, double alpha) {
         this.p = p;
         this.wizardSet = p.wizardSet;
@@ -21,19 +33,49 @@ public class AnnealingSolver {
         this.alpha = alpha;
     }
 
-    public void solve() {
-        ArrayList<String> curOrdering;
-        ArrayList<String> newOrdering;
-        double temperature = 1.0;
-        curOrdering = getRandomOrdering();
+    public boolean solve() throws IOException{
+        // IO stuff
+        PipedOutputStream source = new PipedOutputStream();
+        Thread listener = new ReaderThread(source);
+        listener.start();
 
+
+        PipedInputStream consume = new PipedInputStream(source);
+        curOrdering = getRandomOrdering();
         Random r = new Random();
         int counter = 0;
         while (true) {
+            if (counter % 10000 == 0) {
+                if (consume.available() > 0) {
+                    int command = consume.read();
+                    System.out.println("you typed: " + (char)command);
+                    switch (command) {
+                        case 'q':
+                            temperature += 10;
+                            System.out.println("new temperature: " + temperature);
+                            break;
+                        case 'a':
+                            temperature -= 10;
+                            System.out.println("new temperature: " + temperature);
+                            break;
+                        case 't':
+                            System.out.println("current temperature: " + temperature);
+                            break;
+                        case 'r':
+                            curOrdering = getRandomOrdering();
+                            break;
+                        case 'p':
+                            writePartial(curOrdering, p);
+                            return false;
+                        default:
+                            break;
+                    }
+                }
+            }
             int before = getScore(curOrdering, constraints);
             if (before == constraints.size()) {
                 writeToFile(curOrdering, p);
-                return;
+                return true;
             }
             double goodness = before/(double)constraints.size();
             if (counter%10001 == 0) {
@@ -44,7 +86,7 @@ public class AnnealingSolver {
                 newOrdering = getNeighbor(curOrdering);
             }
             else if (goodness > 0.95 && counter % 10000 == 0) {
-                newOrdering = capOff(curOrdering);
+                newOrdering = getNeighbor(curOrdering);
                 temperature = 0.3;
             }
             else if (goodness < 0.8 && counter % 201 == 0) {
@@ -61,7 +103,6 @@ public class AnnealingSolver {
             temperature = temperature*alpha;
             counter ++;
         }
-
     }
 
     public int getScore(ArrayList<String> assignment, ArrayList<Constraint> constraints) {
@@ -94,6 +135,22 @@ public class AnnealingSolver {
             }
             printWriter.close();
             System.out.println("Finished " + p.fileName);
+        }
+        catch (IOException ex) {
+            System.out.println("could not write file out");
+        }
+    }
+
+    static void writePartial (ArrayList<String> ordering, Problem p) {
+        try {
+            String newpath = p.fileName.replace("in", "out");
+            FileWriter fileWriter = new FileWriter(newpath);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            for (String wizard: ordering) {
+                printWriter.print(wizard + " ");
+            }
+            printWriter.close();
+            System.out.println("Partial: " + p.fileName);
         }
         catch (IOException ex) {
             System.out.println("could not write file out");

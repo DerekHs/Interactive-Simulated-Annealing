@@ -11,7 +11,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.primitives.Ints;
 
 public class Dispatch {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         File folder = new File("./inputs");
         File[] listOfFiles = folder.listFiles(new FilenameFilter() {
             @Override
@@ -29,11 +29,20 @@ public class Dispatch {
             System.out.println("Started " + listOfFiles[i].getName());
             Instant start = Instant.now();
             Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
-            //ChocoSolve.solve(p);
-            AnnealingSolver tmp = new AnnealingSolver(p, 0.9999);
-            tmp.solve();
+            //boolean success = ChocoSolve.solve(p);
+            AnnealingSolver tmp = new AnnealingSolver(p, 0.99);
+            boolean success = tmp.solve();
             Instant end = Instant.now();
-            System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
+            if (success) {
+                System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
+                File file = new File("./inputs/" + listOfFiles[i].getName());
+                if (file.delete()) {
+                    System.out.println("deleted " + listOfFiles[i].getName());
+                } else {
+                    System.out.println("failed to delete " + listOfFiles[i].getName());
+                }
+            }
+            System.out.println();
         }
     }
 }
