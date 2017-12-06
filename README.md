@@ -6,7 +6,7 @@
 - The Dispatch.java class can run the 2 provided solvers. By modifying lines 32 to 34, you can choose which solver you want to use.
 - One of the 2 provided solvers (ChocoSolve) is the open source [Choco Solver](http://www.choco-solver.org) library. It serves as a benchmark for a general-purpose search algorithm. The other one (AnnealingSolver) is an implementation of [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing).
 - These are the keys for controlling the Simulated Annealing algorithm:
-    -- 't' to show the current temperature
+    *--* 't' to show the current temperature
     -- 'q' to increase temperature
     -- 'a' to decrease temperature
     -- 'w' to perform a randomization of all variables involved in a violated constraint
