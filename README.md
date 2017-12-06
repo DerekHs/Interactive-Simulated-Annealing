@@ -21,6 +21,7 @@ One way of improving a state is to look at neighbors of a state, and see if they
 We want to make it so that the algorithm is inclined to accept inferior neighbor states in the early stages of the algorithm, and less likely to accept them as time passes. We want to be adventurous in the beginning, and more conservative as we gain a better understanding of the search space. We can model the "adventurousness" of the algorithm by a variable T, also known as Temperature.
 
 We calculate the probability that we will accept an inferior state using the following function:
+
 -- e^((neighbor_goodness - current_goodness)/T)
 -- Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness)
 -- And how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
