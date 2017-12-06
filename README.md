@@ -20,14 +20,11 @@ One way of improving a state is to look at neighbors of a state, and see if they
 
 We want to make it so that the algorithm is inclined to accept inferior neighbor states in the early stages of the algorithm, and less likely to accept them as time passes. We want to be adventurous in the beginning, and more conservative as we gain a better understanding of the search space. We can model the "adventurousness" of the algorithm by a variable T, also known as Temperature.
 
-We calculate the probability that we will accept an inferior state using the following function:
+We calculate the probability that we will accept another neighboring state using the following function:
 
 **e^((neighbor_goodness - current_goodness)/T)**
 
-Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness)
+Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This means we will **always** move to a better neighboring state, and will **sometimes** nondeterministically move into a worse neighboring state, as state above.
 
-And how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
 
-Using a random number generator, we can convert this probability into a definite "yes" or a "no" choice.
-
-Then we have our temperature decay by multiplying it by some number less than 1 each iteration. In this case, we multiplied by 0.99.
+Using a random number generator, we can convert this probability into a definite "yes" or a "no" choice. Then we have our temperature decay by multiplying it by some number less than 1 each iteration. In this case, we multiplied by 0.99.
