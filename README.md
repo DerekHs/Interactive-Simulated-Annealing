@@ -25,7 +25,7 @@ We calculate the probability that we will accept an inferior state using the fol
 
 **e^((neighbor_goodness - current_goodness)/T)**
 
-Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
+Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This is reflects the fact that a Simulated Annealing algorithm will **always** move into a better neighboring state, and will **sometimes** nondeterministically move into an into a worse neighboring state.
 
 Using a random number generator, we can convert this probability into a definite "yes" or a "no" choice.
 
