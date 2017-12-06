@@ -22,11 +22,12 @@ We want to make it so that the algorithm is inclined to accept inferior neighbor
 
 We calculate the probability that we will accept an inferior state using the following function:
 
--- e^((neighbor_goodness - current_goodness)/T)
--- Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness)
--- And how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
+**e^((neighbor_goodness - current_goodness)/T)**
 
-Using a random number generator, we can convert this probability into a definite "yes" or a "no". Will I accept this inferior state, or will I stay in my current state?
+Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness)
 
+And how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
 
+Using a random number generator, we can convert this probability into a definite "yes" or a "no" choice.
 
+Then we have our temperature decay by multiplying it by some number less than 1 each iteration. In this case, we multiplied by 0.99.
