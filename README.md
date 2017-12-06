@@ -24,7 +24,7 @@ We calculate the probability that we will accept another neighboring state using
 
 **e^((neighbor_goodness - current_goodness)/T)**
 
-Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This means we will **always** move to a better neighboring state, and will **sometimes** nondeterministically move into a worse neighboring state, as state above.
+Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This means we will **always** move to a better neighboring state, and will **sometimes** nondeterministically move into a worse neighboring state, as stated above.
 
 
 Using a random number generator, we can convert this probability into a definite "yes" or a "no" choice. Then we have our temperature decay by multiplying it by some number less than 1 each iteration. In this case, we multiplied by 0.99.
