@@ -37,8 +37,8 @@ public class ChocoSolve {
             IntVar first = wizardMappings.get(c.wizards[0]);
             IntVar second = wizardMappings.get(c.wizards[1]);
             IntVar third = wizardMappings.get(c.wizards[2]);
-            model.or(model.and(model.arithm(third, ">", first), model.arithm(third, ">", second)),
-                    model.and(model.arithm(third, "<", first), model.arithm(third, "<", second)
+            model.or(model.and(model.arithm(third, ">=", first), model.arithm(third, ">=", second)),
+                    model.and(model.arithm(third, "<=", first), model.arithm(third, "<=", second)
             )).post();
         }
         model.allDifferent(wizardMappings.values().toArray(new IntVar[(wizardMappings.values().size())])).post();
@@ -54,7 +54,9 @@ public class ChocoSolve {
                 }
             });
             try {
-                String newpath = p.fileName.replace("in", "out");
+                String newpath = p.fileName.replace(".in", ".out");
+                newpath = newpath.replace("./inputs", "./outputs");
+                System.out.println(newpath);
                 FileWriter fileWriter = new FileWriter(newpath);
                 PrintWriter printWriter = new PrintWriter(fileWriter);
                 for (IntVar wizard: solution) {

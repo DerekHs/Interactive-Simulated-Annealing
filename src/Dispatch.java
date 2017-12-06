@@ -30,8 +30,8 @@ public class Dispatch {
             Instant start = Instant.now();
             Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
             //boolean success = ChocoSolve.solve(p);
-            AnnealingSolver tmp = new AnnealingSolver(p, 0.99);
-            boolean success = tmp.solve();
+            //AnnealingSolver tmp = new AnnealingSolver(p, 0.9999);
+            //boolean success = tmp.solve();
             Instant end = Instant.now();
             if (success) {
                 System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));

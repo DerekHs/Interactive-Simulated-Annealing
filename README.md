@@ -1,2 +1,31 @@
-# Solver_LP
-This repo solves age dependencies between wizards using Linear Programming. 
+# Interactive-Annealing-Solver
+---
+### Instructions
+- This repo requires Java 1.8 to run
+- The entry point into this program is the Dispatch.java class, which is responsible for parsing files from the input folder, calling the algorithm, and deleting a file from the input folder after it has been successfully solved.
+- The Dispatch.java class can run the 2 provided solvers. By modifying lines 32 to 34, you can choose which solver you want to use.
+- One of the 2 provided solvers (ChocoSolve) is the open source [Choco Solver](http://www.choco-solver.org) library. It serves as a benchmark for a general-purpose search algorithm. The other one (AnnealingSolver) is an implementation of [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing).
+- These are the keys for controlling the Simulated Annealing algorithm:
+-- 't' to show the current temperature
+-- 'q' to increase temperature
+-- 'a' to decrease temperature
+-- 'w' to perform a randomization of all variables involved in a violated constraint
+-- 's' to attempt to fix one violated constraint
+-- 'p' to print the partial solution of a problem to a file
+
+### What is Simulated Annealing?
+Simulated Annealing(SA) a type of local search, meaning that it tries to improve on its current state. In the case of constraint satisfaction, the number of constraints satisfied can be considered the same thing as the "goodness" of the solution.
+
+One way of improving a state is to look at neighbors of a state, and see if they are better or worse than the current state. A Simulated Annealing algorithm will **always** move into a better neighboring state, and will **sometimes** nondeterministically move into an into a worse neighboring state.
+
+We want to make it so that the algorithm is inclined to accept inferior neighbor states in the early stages of the algorithm, and less likely to accept them as time passes. We want to be adventurous in the beginning, and more conservative as we gain a better understanding of the search space. We can model the "adventurousness" of the algorithm by a variable T, also known as Temperature.
+
+We calculate the probability that we will accept an inferior state using the following function:
+-- e^((neighbor_goodness - current_goodness)/T)
+-- Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness)
+-- And how the value of this function is always less than 1 when (neighbor_goodness < current_goodness)
+
+Using a random number generator, we can convert this probability into a definite "yes" or a "no". Will I accept this inferior state, or will I stay in my current state?
+
+
+
