@@ -6,12 +6,13 @@
 - The Dispatch.java class can run the 2 provided solvers. By modifying lines 32 to 34, you can choose which solver you want to use.
 - One of the 2 provided solvers (ChocoSolve) is the open source [Choco Solver](http://www.choco-solver.org) library. It is a general-purpose search algorithm that serves as a benchmark. The other one (AnnealingSolver) is an implementation of [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing).
 - These are the keys for controlling the Simulated Annealing algorithm:
-    -- 't' to show the current temperature
-    -- 'q' to increase temperature
-    -- 'a' to decrease temperature
-    -- 'w' to perform a randomization of all variables involved in a violated constraint
-    -- 's' to attempt to fix one violated constraint
-    -- 'p' to print the partial solution of a problem to a file
+    - 't' to show the current temperature
+    - 'q' to increase temperature
+    - 'a' to decrease temperature
+    - 'w' to perform a randomization of all variables involved in a violated constraint
+    - 's' to attempt to fix one violated constraint
+    - 'r' to restart the problem by randomizing the current state
+    - 'p' to print the partial solution of a problem to a file
 ### The Problem We Are Solving
 Suppose there exists an ordering of ages for a set of people. You are given a list of constraints of the form [a, b, c] which means that the age of person c is not in between the ages of people a and b. Suppose there exists at least one ordering of people that satisfies all of the constraints. Your goal is to find an ordering of people that satisfies every single constraint.
 ### What is Simulated Annealing?
