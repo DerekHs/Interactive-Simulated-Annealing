@@ -26,5 +26,5 @@ We calculate the probability that we will move into a neighboring state using th
 
 **e^((neighbor_goodness - current_goodness)/T)**
 
-Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This is reflects the fact that a Simulated Annealing algorithm will **always** move into a better neighboring state, and will **sometimes** move into an into a worse neighboring state. The chance that the algorithm chooses to move into an inferior state is highly dependent on how high the Temperature is.
+Notice how the value of this function is always greater than 1 when (neighbor_goodness > current_goodness), and how the value of this function is always less than 1 when (neighbor_goodness < current_goodness). This is reflects the fact that a Simulated Annealing algorithm will **always** move into a better neighboring state, and will **sometimes** move into an into a worse neighboring state, depending on the value of Temperature.
 Finally we decay our temperature by multiplying it by some number less than 1 each iteration. In this case, we chose 0.99.
