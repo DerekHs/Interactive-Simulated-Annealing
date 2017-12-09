@@ -27,6 +27,8 @@ public class AnnealingSolver {
     ArrayList<String> curOrdering;
     ArrayList<String> newOrdering;
     double temperature = 1.0;
+    ArrayList<String> best;
+    int bestValue = 0;
 
     public AnnealingSolver(Problem p, double alpha) {
         this.p = p;
@@ -80,6 +82,9 @@ public class AnnealingSolver {
                         case 'w':
                             curOrdering = swap(curOrdering);
                             break;
+                        case 'b':
+                            curOrdering = best;
+                            break;
                         case 'p':
                             writePartial(curOrdering, p);
                             return false;
@@ -90,6 +95,13 @@ public class AnnealingSolver {
                 }
             }
             int before = getScore(curOrdering, constraints);
+            if (before > bestValue) {
+                bestValue = before;
+                best = new ArrayList<>();
+                for (int i = 0; i < curOrdering.size(); i++) {
+                    best.add(curOrdering.get(i));
+                }
+            }
             if (before == constraints.size()) {
                 writeToFile(curOrdering, p);
                 return true;
