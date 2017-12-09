@@ -30,18 +30,18 @@ public class Dispatch {
             Instant start = Instant.now();
             Problem p = Parser.parse("./inputs/" + listOfFiles[i].getName());
             //boolean success = ChocoSolve.solve(p);
-            //AnnealingSolver tmp = new AnnealingSolver(p, 0.9999);
-            //boolean success = tmp.solve();
+            AnnealingSolver tmp = new AnnealingSolver(p, 0.9999);
+            boolean success = tmp.solve();
             Instant end = Instant.now();
-            if (success) {
-                System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
-                File file = new File("./inputs/" + listOfFiles[i].getName());
-                if (file.delete()) {
-                    System.out.println("deleted " + listOfFiles[i].getName());
-                } else {
-                    System.out.println("failed to delete " + listOfFiles[i].getName());
-                }
-            }
+//            if (success) {
+//                System.out.println("--Finished " + listOfFiles[i].getName() + " in " + Duration.between(start, end));
+//                File file = new File("./inputs/" + listOfFiles[i].getName());
+//                if (file.delete()) {
+//                    System.out.println("deleted " + listOfFiles[i].getName());
+//                } else {
+//                    System.out.println("failed to delete " + listOfFiles[i].getName());
+//                }
+//            }
             System.out.println();
         }
     }

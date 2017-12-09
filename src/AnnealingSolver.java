@@ -17,6 +17,8 @@ import java.util.Iterator;
 /**
  * Created by derek on 11/30/17.
  */
+
+
 public class AnnealingSolver {
     Problem p;
     HashSet<String> wizardSet;
@@ -31,6 +33,15 @@ public class AnnealingSolver {
         this.wizardSet = p.wizardSet;
         this.constraints = p.constraints;
         this.alpha = alpha;
+    }
+
+    public static void solve(Problem p, double alpha) {
+        AnnealingSolver temp = new AnnealingSolver(p, alpha);
+        try {
+            temp.solve();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean solve() throws IOException{
