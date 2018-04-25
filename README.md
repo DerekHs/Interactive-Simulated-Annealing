@@ -16,7 +16,7 @@
     - 'p' to print the partial solution of a problem to a file
     
 ### The Problem
-Suppose there exists an ordering of ages for a set of people. You are given a list of constraints of the form [a, b, c] which means that the age of person c is not in between the ages of people a and b. Suppose there exists at least one ordering of people that satisfies all of the constraints. Your goal is to find an ordering of people that satisfies every single constraint.
+Suppose there exists an ordering of ages for a set of people. You are given a list of constraints of the form [a, b, c] which means that the age of person c is not in between the ages of people a and b. Suppose there exists at least one ordering of people that satisfies all of the constraints. Your goal is to find an ordering of people that satisfies every single constraint. This problem is canonically known as "betweeness" and has significance in bioinformatics and modeling theories of probability, causality, and time. [wikipedia.org/wiki/Betweenness]
 
 ### What is Simulated Annealing?
 Simulated Annealing(SA) is a type of local search, meaning that it tries to improve on its current state by considering its neighboring states. In this problem, the desirability of a given state is given by how many constraints it satisfies. A Simulated Annealing algorithm will **always** move into a better neighboring state, and will **sometimes** move into an into a worse neighboring state depending on the Temperature. Higher temperatures increase the probability that the algorithm will choose to move into an inferior state.
